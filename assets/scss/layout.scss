@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  box-sizing: border-box;
+
+  #layout-main {
+    height: 100%;
+    margin: 25px;
+  }
+
+  .btn {
+    margin: 5px;
+    padding: 8px;
+    background-color: rgb(73, 186, 223);
+    border: none;
+    font-weight: bold;
+    color: white;
+  }
+
+  .btn:hover {
+    background-color: rgb(130, 197, 220);
+  }
+}
