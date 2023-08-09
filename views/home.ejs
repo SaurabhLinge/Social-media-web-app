@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="<%= assetPath('css/home.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>" />
+
+<div id="home-container">
+  <!-- ! Form to create Posts -->
+  <section id="feed-posts">
+    <h3>Posts</h3>
+
+    <!--* Restricting the forms visibility to only signed in users -->
+    <% if(locals.user) { %>
+    <form action="/posts/create" id="new-post-form" method="POST">
+      <textarea
+        name="content"
+        cols="30"
+        rows="3"
+        placeholder="Type Here..."
+        required
+        id="textArea"
+      ></textarea>
+
+      <input class="btn" type="submit" value="Post" id="postBtn" />
+    </form>
+    <% } %>
+
+    <!-- using only "user" will give an error as user will not be defined if user
+  is not signed in, but locals is an object which is always present so if no
+  user is signed in "locals.user" will return false -->
+
+    <!-- ! List of Posts -->
+    <div id="posts-list-container">
+      <ul>
+        <% for (post of posts) { %> <%- include('_post') -%> <% } %>
+      </ul>
+    </div>
+  </section>
+
+  <section id="user-friends">
+    <h4>Friends</h4>
+
+    <% for(u of all_users) { %>
+
+    <p>
+      <a href="/users/profile/<%= u.id %>"> <%= u.name %> </a>
+    </p>
+
+    <% } %>
+  </section>
+
+  <!-- > Chat Box -->
+  <%- include('_chat_box') -%>
+</div>
+
+<!-- importing this script for creating the comments -->
+<script src="<%= assetPath('js/home_post_comments.js') %>"></script>
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
+
+<!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
+<script src="<%= assetPath('js/toggle_likes.js') %>"></script>
+<script>
+  $(".toggle-like-button").each(function () {
+    let self = this;
+    let toggleLike = new ToggleLike(self);
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="<%= assetPath('js/chat_engine.js') %>"></script>
+<% if (locals.user){ %>
+<script>
+  new ChatEngine("user-chat-box", "<%= locals.user.email %>");
+</script>
+<% } %>
